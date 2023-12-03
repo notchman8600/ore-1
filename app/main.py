@@ -2,7 +2,7 @@
 import json
 
 # Third Party Library
-from asgiref.typing import ASGIReceiveCallable, ASGISendCallable, Scope
+from asgiref.typing import ASGIReceiveCallable, ASGISendCallable, HTTPRequestEvent, HTTPScope, Scope
 from router.http_router import dispatch_http_event
 
 
@@ -13,6 +13,7 @@ async def app(scope: Scope, receive: ASGIReceiveCallable, send: ASGISendCallable
     try:
         if scope["type"] == "http":
             # scope["type"] == "http" であることを期待してhttpリクエストに紐付くイベントを処理
+            assert type(scope) == HTTPScope
             await dispatch_http_event(scope, receive, send)
     except Exception as e:
         # ここでの例外はイベント起動に関わる例外のみで、アプリケーションレベルの例外はdispatcherのハンドラで全て処理を行う
