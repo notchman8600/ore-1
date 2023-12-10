@@ -12,3 +12,7 @@
 ```
 poetry export -f requirements.txt --output requirements.txt --without-hashes
 ```
+
+# 参考にしたやり取り
+
+- https://chat.openai.com/share/cbc13752-549c-47f3-b637-9e2d91e88236

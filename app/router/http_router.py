@@ -10,6 +10,16 @@ def http_router(scope: HTTPScope, receive: ASGIReceiveCallable) -> dict[str, Any
     path = scope["path"]
     if path == "/":
         return {"message": "hello"}
+    elif path == "/user" and scope["method"] == "POST":
+        # リクエストボディを受け取る
+        event = receive()
+        return {"message": {"message": f"とりあえずPOSTはできたからいい加減な値を返す"}}
+        # request_body = validate_create_user_request(event)
+        # return {"message": f"hello, {request_body['name']}"}
+        # assert event["type"] == "http.request"
+        # request_body = json.loads(event["body"].decode())
+        # return {"message": f"hello, {request_body['name']}"}
+
     else:
         return {"message": "Not Found"}
 
