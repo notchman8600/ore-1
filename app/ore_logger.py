@@ -10,7 +10,7 @@ class NewRelicHandler(logging.Handler):
         pass
 
 
-def setup_logger():
+def setup_logger() -> logging.Logger:
     logger = logging.getLogger("ore_logger")
     logger.setLevel(logging.DEBUG)
 
