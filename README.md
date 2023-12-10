@@ -16,3 +16,4 @@ poetry export -f requirements.txt --output requirements.txt --without-hashes
 # 参考にしたやり取り
 
 - https://chat.openai.com/share/cbc13752-549c-47f3-b637-9e2d91e88236
+- https://chat.openai.com/share/340c7795-56af-42fb-8bb3-1a8b17c696e1

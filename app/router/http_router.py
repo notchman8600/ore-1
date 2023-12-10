@@ -4,16 +4,18 @@ from typing import Any
 
 # Third Party Library
 from asgiref.typing import ASGIReceiveCallable, ASGISendCallable, HTTPRequestEvent, HTTPScope
+from template import render_template
 
 
-def http_router(scope: HTTPScope, receive: ASGIReceiveCallable) -> dict[str, Any]:
+def http_router(scope: HTTPScope, receive: ASGIReceiveCallable) -> tuple[bytes, bytes]:
     path = scope["path"]
     if path == "/":
-        return {"message": "hello"}
+        content = render_template("index.jinja2.html", {"message": "hello, I am variable value."})
+        return b"text/html", content.encode()
     elif path == "/user" and scope["method"] == "POST":
         # リクエストボディを受け取る
         event = receive()
-        return {"message": {"message": f"とりあえずPOSTはできたからいい加減な値を返す"}}
+        return b"application/json", json.dumps({"message": {"message": f"とりあえずPOSTはできたからいい加減な値を返す"}}).encode()
         # request_body = validate_create_user_request(event)
         # return {"message": f"hello, {request_body['name']}"}
         # assert event["type"] == "http.request"
@@ -21,16 +23,15 @@ def http_router(scope: HTTPScope, receive: ASGIReceiveCallable) -> dict[str, Any
         # return {"message": f"hello, {request_body['name']}"}
 
     else:
-        return {"message": "Not Found"}
+        return b"application/json", json.dumps({"message": "Not Found"}).encode()
 
 
 async def dispatch_http_event(scope: HTTPScope, receive: ASGIReceiveCallable, send: ASGISendCallable) -> None:
-    res_body: dict[str, Any] = http_router(scope, receive)
-    encoded_res = json.dumps(res_body).encode()
+    content_type, encoded_res = http_router(scope, receive)
     # レスポンスヘッダ
     headers = [
-        (b"content-type", b"application/json"),
-        (b"content-length", str(len(encoded_res)).encode()),
+        (b"content-type", content_type),
+        (b"content-length", str(len(encoded_res)).encode(encoding="utf-8")),
     ]
     await send({"type": "http.response.start", "status": 200, "headers": headers})
     await send({"type": "http.response.body", "body": encoded_res})

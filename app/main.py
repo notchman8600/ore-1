@@ -5,7 +5,7 @@ import json
 from asgiref.typing import ASGIReceiveCallable, ASGISendCallable, HTTPRequestEvent, HTTPScope, Scope
 from ore_logger import logger
 from router.http_router import dispatch_http_event
-
+from jinja2 import Environment, FileSystemLoader
 
 async def app(scope: Scope, receive: ASGIReceiveCallable, send: ASGISendCallable) -> None:
     # JSONデータを準備
