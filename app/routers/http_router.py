@@ -4,7 +4,6 @@ from typing import Any
 
 # Third Party Library
 from asgiref.typing import ASGIReceiveCallable, HTTPScope
-from template import render_template
 
 # First Party Library
 from app.actions.hello_action import HelloAction
