@@ -1,28 +1,10 @@
 # Standard Library
-import json
 from typing import Any
 
 # Third Party Library
-from asgiref.typing import ASGIReceiveCallable, ASGISendCallable, HTTPRequestEvent, HTTPResponseStartEvent, HTTPScope
+from asgiref.typing import ASGIReceiveCallable, ASGISendCallable, HTTPScope
+from routers.http_router import http_router
 from template import render_template
-
-# First Party Library
-from app.actions.hello_action import HelloAction
-
-
-def http_router(scope: HTTPScope, receive: ASGIReceiveCallable) -> tuple[bytes, bytes]:
-    path = scope["path"]
-    if path == "/":
-        hello_action = HelloAction()
-        return hello_action.run()
-
-    elif path == "/user" and scope["method"] == "POST":
-        # リクエストボディを受け取る
-        event = receive()
-        return b"application/json", json.dumps({"message": {"message": f"とりあえずPOSTはできたからいい加減な値を返す"}}).encode()
-    else:
-        # 本当に適当なレスポンスを作成したい時はこのように直接書くこともできる
-        return b"application/json", json.dumps({"message": "Not Found"}).encode()
 
 
 async def dispatch_http_event(scope: HTTPScope, receive: ASGIReceiveCallable, send: ASGISendCallable) -> None:
@@ -40,6 +22,7 @@ async def dispatch_http_event(scope: HTTPScope, receive: ASGIReceiveCallable, se
         await send({"type": "http.response.body", "body": encoded_res})
     except Exception as e:
         # HTTPレスポンスの準備
+        # ここではエラー起因の白い画面を出さないようにするためにエラーページをレンダリングする
         html_content = render_template("error.jinja2.html", {"message": "hello, I am variable value."})
         await send(
             {
