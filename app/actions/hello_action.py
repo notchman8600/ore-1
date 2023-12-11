@@ -1,6 +1,3 @@
-# Standard Library
-from typing import override
-
 # Third Party Library
 from actions.action import Action
 
