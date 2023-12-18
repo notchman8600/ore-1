@@ -11,5 +11,6 @@ class HelloAction(Action):
 
     def run(self) -> tuple[bytes, bytes]:
         # Actionでレスポンスを作成する
+        # 本来であればDTOクラスを作成して、そこに値を詰めて返すべきだが、今回は省略している
         content = render_template("index.jinja2.html", {"message": "hello, I am variable value."})
         return b"text/html", content.encode()
