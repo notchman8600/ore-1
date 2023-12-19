@@ -45,6 +45,13 @@ max-line-length = 128
 
 [tool.poetry.dependencies]
 python = "3.12"
+starlette = "^0.33.0"
+uvicorn = "^0.24.0.post1"
+asgiref = "^3.7.2"
+jinja2 = "^3.1.2"
+pymysql = "^1.1.0"
+dbutils = "^3.0.3"
+cryptography = "^41.0.7"
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^2.2.1"
