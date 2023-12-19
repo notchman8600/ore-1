@@ -1,16 +1,23 @@
 # Third Party Library
 from actions.action import Action
-
-# First Party Library
-from app.template import render_template
+from controllers.hello_controller import controller
+from template import render_template
 
 
 class HelloAction(Action):
     def __init__(self) -> None:
         super().__init__("hello", "say hello", {"name": "string"})
 
-    def run(self) -> tuple[bytes, bytes]:
+    def run(self, id: str) -> tuple[bytes, bytes]:
         # Actionでレスポンスを作成する
-        # 本来であればDTOクラスを作成して、そこに値を詰めて返すべきだが、今回は省略している
-        content = render_template("index.jinja2.html", {"message": "hello, I am variable value."})
+        res = controller.get_hello(1)
+        content = render_template(
+            "index.jinja2.html",
+            {
+                "message": "hello, I am variable value.",
+                "name": res.user_name,
+                "greeting": res.greeting,
+                "user_id": res.user_id,
+            },
+        )
         return b"text/html", content.encode()

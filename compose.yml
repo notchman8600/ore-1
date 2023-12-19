@@ -6,3 +6,24 @@ services:
     volumes:
       - ./app:/app
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    environment:
+      - PYTHONUTF8=1
+  mysql:
+    image: mysql
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/ddl:/docker-entrypoint-initdb.d/
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ore
+    cap_add:
+      - SYS_NICE
+    healthcheck:
+      test: mysqladmin ping
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 1s
+volumes:
+  db_data:

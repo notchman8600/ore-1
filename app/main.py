@@ -3,8 +3,8 @@ import json
 
 # Third Party Library
 from asgiref.typing import ASGIReceiveCallable, ASGISendCallable, Scope
+from dispatchers.http_dispatcher import dispatch_http_event
 from ore_logger import logger
-from routers.http_router import dispatch_http_event
 
 
 # ASGIアプリのエントリーポイント
