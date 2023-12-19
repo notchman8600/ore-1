@@ -6,10 +6,16 @@
 
 主観が含まれています。私は私の課題しか見ておりません、あなたの課題には興味ありません。
 
+# 起動コマンド
 
-# コマンド
+**[コンテナの起動]**
 
+```shell
+docker compose build && docker compose up -d
 ```
+
+**[パッケージ出力]**
+```shell
 poetry export -f requirements.txt --output requirements.txt --without-hashes
 ```
 
