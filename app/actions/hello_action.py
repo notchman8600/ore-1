@@ -8,7 +8,7 @@ class HelloAction(Action):
     def __init__(self) -> None:
         super().__init__("hello", "say hello", {"name": "string"})
 
-    def run(self, id: str) -> tuple[bytes, bytes]:
+    def run(self, headers: dict, body: dict) -> tuple[bytes, bytes]:
         # Actionでレスポンスを作成する
         res = controller.get_hello(1)
         content = render_template(
