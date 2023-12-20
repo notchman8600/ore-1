@@ -6,6 +6,7 @@ from urllib.parse import parse_qs
 # Third Party Library
 from actions.hello_action import HelloAction
 from asgiref.typing import ASGIReceiveCallable, HTTPScope
+from ore_logger import logger
 
 
 async def receive_body(receive: Any) -> str:
@@ -25,14 +26,23 @@ def parse_query_string(query_string: bytes) -> dict:
     return {k: v[0] for k, v in parsed.items()}
 
 
+def parse_headers(headers: list[tuple[bytes, bytes]]) -> dict:
+    return {k.decode(): v.decode() for k, v in headers}
+
+
 # ルーターではリクエストを受け取ってアクションを実行しレスポンスを返却する。リクエストやレスポンスの内容はアクションに委譲する
 async def http_router(scope: HTTPScope, receive: ASGIReceiveCallable) -> tuple[bytes, bytes]:
     path = scope["path"]
+    content_type: list[tuple[bytes, bytes]] = scope["headers"]
     if path == "/":
         hello_action = HelloAction()
         # リクエストボディを受け取る
         body = await receive_body(receive)
-        return hello_action.run(body)
+        # ヘッダーの解析
+        headers = parse_headers(content_type)
+        logger.info(headers)
+        # ボディの中身とcontent-typeを渡す
+        return hello_action.run(body=body, headers=headers)
     elif path == "/user" and scope["method"] == "POST":
         # リクエストボディを受け取る
         event = receive()
