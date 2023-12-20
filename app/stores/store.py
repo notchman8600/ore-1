@@ -30,7 +30,7 @@ class Store(DatabasePool):
                 cursor.execute(query, data)
                 return cursor.fetchall()
 
-    def insert_data(self, query, data):
+    def execute(self, query, data):
         with self.get_connection() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(query, data)

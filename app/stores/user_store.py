@@ -24,4 +24,4 @@ class UserStore(Store):
 
     def insert_user(self, user_id: int, user_name: str):
         query = f"INSERT INTO users (id, user_name) VALUES (%s, %s)"
-        self.insert_data(query, (user_id, user_name))
+        self.execute(query, (user_id, user_name))

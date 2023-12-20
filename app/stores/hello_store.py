@@ -15,7 +15,7 @@ class HelloStore(Store):
 
     def insert_greeting(self, greeting: str):
         query = f"INSERT INTO greetings (comment) VALUES (%s)"
-        self.insert_data(query, greeting)
+        self.execute(query, greeting)
 
     def get_by_user_id(self, user_id: int) -> HelloDto:
         query = f"SELECT comment FROM greetings WHERE user_id = %s"
